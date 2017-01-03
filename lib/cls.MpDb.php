@@ -1,6 +1,6 @@
 <?php
 
-class MpDb
+class MpDbOperationlog
 {
     private $tableName = array();
     private $wpdb = null;

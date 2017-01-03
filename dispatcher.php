@@ -173,16 +173,16 @@ function mpUserLoginWriteIp($userName)
 
 function operationlog_activation_createtable()
 {
-    require_once(MRPENG_ROOT.'lib/MpDb.cls.php');
-    $db = new MpDb();
+    require_once(MRPENG_ROOT.'lib/cls.MpDb.php');
+    $db = new MpDbOperationlog();
     $db->setTableName(array('mp_ips','mp_logs'));
     $db->checkTables();
 }
 
 function operationlog_activation_deletetable()
 {
-    require_once(MRPENG_ROOT.'lib/MpDb.cls.php');
-    $db = new MpDb();
+    require_once(MRPENG_ROOT.'lib/cls.MpDb.php');
+    $db = new MpDbOperationlog();
     $db->setTableName(array('mp_ips','mp_logs'));
     $db->delete();
 }
