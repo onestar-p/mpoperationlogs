@@ -54,7 +54,7 @@ function E($msg, $e_code=0) {
 
 }
 
-function die_err($msg='',$arr=array())
+function operationlog_die_err($msg='',$arr=array())
 {
     $arr = array(
         'status' =>0,
@@ -64,7 +64,7 @@ function die_err($msg='',$arr=array())
     exit(json_encode($arr));
 }
 
-function die_ok($msg='',$arr=array())
+function operationlog_die_ok($msg='',$arr=array())
 {
     $arr = array(
         'status' =>1,

@@ -6,12 +6,12 @@ add_action('wp_login','mpUserLoginWriteIp');
 add_action('admin_menu','mpMenuIndex');
 function mpMenuIndex()
 {
-    add_menu_page('管理员操作日志','管理员操作日志','administrator','mpMenuIndex','mpListIndex');
+    add_menu_page('管理员操作日志','管理员操作日志','administrator','mpMenuIndex','poperationlogListIndex');
     add_submenu_page('mpMenuIndex','操作日志列表','日志列表','administrator','operationLog','mpGetLogsListView');
     add_submenu_page('mpMenuIndex','IP地址列表','IP列表','administrator','iplist','mpGetIpListView');
 }
 
-function mpListIndex()
+function poperationlogListIndex()
 {
 
     echo '<h1>欢迎使用</h1><hr>';
@@ -82,11 +82,11 @@ function mpAjaxGetLogsList()
         },$page,$limit);
         $html = $log->fetch('loglist_td',$res['list']);
         $res['list'] = $html;
-        die_ok('ok',$res);
+        operationlog_die_ok('ok',$res);
     }
     catch(Exception $e)
     {
-        die_err($e->getMessage());
+        operationlog_die_err($e->getMessage());
     }
 }
 
@@ -111,17 +111,18 @@ function mpAjaxGetIpsList()
         },$page,$limit);
         $html = $ipObj->fetch('ipslist_td',$res['list']);
         $res['list'] = $html;
-        die_ok('ok',$res);
+        operationlog_die_ok('ok',$res);
     }
     catch (Exception $e)
     {
-        die_err($e->getMessage());
+        operationlog_die_err($e->getMessage());
     }
 }
 
 
 
-add_action('wp_ajax_'.AJAX_ACTION,AJAX_ACTION);
+add_action('wp_ajax_mpAjaxGetIpsList','mpAjaxGetIpsList');
+add_action('wp_ajax_mpAjaxGetLogsList','mpAjaxGetLogsList');
 
 // 新增、修改文章保存日志
 function postAddLogs($post_id)
@@ -170,7 +171,7 @@ function mpUserLoginWriteIp($userName)
 
 }
 
-function plugin_activation_createtable()
+function operationlog_activation_createtable()
 {
     require_once(MRPENG_ROOT.'lib/MpDb.cls.php');
     $db = new MpDb();
@@ -178,7 +179,7 @@ function plugin_activation_createtable()
     $db->checkTables();
 }
 
-function plugin_activation_deletetable()
+function operationlog_activation_deletetable()
 {
     require_once(MRPENG_ROOT.'lib/MpDb.cls.php');
     $db = new MpDb();
