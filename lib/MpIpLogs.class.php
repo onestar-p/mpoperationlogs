@@ -1,6 +1,6 @@
 <?php
-require_once(MRPENG_ROOT.'lib/Base.php');
-class MpIpLogs extends Base
+require_once(MRPENG_ROOT.'lib/OperationlogBase.php');
+class MpIpLogs extends OperationlogBase
 {
 
    public function __construct()

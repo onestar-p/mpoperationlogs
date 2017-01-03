@@ -1,6 +1,6 @@
 <?php
-require_once(MRPENG_ROOT.'lib/Base.php');
-class MpLogs extends Base
+require_once(MRPENG_ROOT.'lib/OperationlogBase.php');
+class MpLogs extends OperationlogBase
 {
     private $op_type;
     private $allow_op_type = array('create','update','delete');
