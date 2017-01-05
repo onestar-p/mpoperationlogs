@@ -6,20 +6,26 @@ abstract class OperationlogBase
     private $order = '';
     protected $wpdb = null;
 
-
+    protected $mrpengRoot;
+    public function __construct()
+    {
+        global $mrpengRoot;
+        $this->mrpengRoot = $mrpengRoot;
+    }
 
     public function assign($variableName='',$params='')
     {
         $variableName = trim($variableName);
-        if(empty($variableName)) E('变量名不能为空');
+        if(empty($variableName)) ETHROW('变量名不能为空');
         $this->variableParams[$variableName] = $params;
     }
 
     public function fetch($temp='',$data=array())
     {
-        if(!checkOutputBuffering()) E('ERROR:php output_buffering 未开启,不能正常使用本插件');
+
+        if(!checkOutputBuffering()) ETHROW('ERROR:php output_buffering 未开启,不能正常使用本插件');
         ob_start();
-        require_once(MRPENG_ROOT.'template/'.$temp.'.php');
+        require_once($this->mrpengRoot.'template/'.$temp.'.php');
         return ob_get_clean();
     }
 
@@ -27,7 +33,7 @@ abstract class OperationlogBase
     {
         if(!empty($this->variableParams))
             extract($this->variableParams);
-        include_once(MRPENG_ROOT.'template/'.$tName.'.php');
+        include_once($this->mrpengRoot.'template/'.$tName.'.php');
         exit;
     }
 

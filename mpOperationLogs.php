@@ -8,12 +8,16 @@ Author: Mrpeng
 Author URI: http://www.ipy8.com/
 */
 defined( 'ABSPATH' )  or exit;
-date_default_timezone_set(get_option('timezone_string'));
-define("MRPENG_ROOT", dirname(__FILE__) . '/');
-require_once(MRPENG_ROOT.'common.php');
-require_once(MRPENG_ROOT.'dispatcher.php');
-require_once(MRPENG_ROOT.'lib/MpLogs.class.php');
-require_once(MRPENG_ROOT.'lib/MpIpLogs.class.php');
+$timezoneString = get_option('timezone_string');
+$timezoneString = !empty($timezoneString)?
+                    $timezoneString:'Asia/Shanghai';
+date_default_timezone_set($timezoneString);
+
+$mrpengRoot = plugin_dir_path(__FILE__ );
+require_once($mrpengRoot.'common.php');
+require_once($mrpengRoot.'dispatcher.php');
+require_once($mrpengRoot.'lib/MpLogs.class.php');
+require_once($mrpengRoot.'lib/MpIpLogs.class.php');
 register_activation_hook(__FILE__, 'operationlog_activation_createtable');
 register_deactivation_hook(__FILE__, 'operationlog_activation_deletetable');
 

@@ -1,5 +1,5 @@
 <?php
-require_once(MRPENG_ROOT.'lib/OperationlogBase.php');
+require_once($mrpengRoot.'lib/OperationlogBase.php');
 class MpLogs extends OperationlogBase
 {
     private $op_type;
@@ -15,6 +15,7 @@ class MpLogs extends OperationlogBase
 
     public function __construct()
     {
+        parent::__construct();
         if(!$this->wpdb)
         {
             global $wpdb;
@@ -25,14 +26,14 @@ class MpLogs extends OperationlogBase
 
     public function action($type)
     {
-        if(!in_array($type,$this->allow_op_type)) E('不存在该日志操作类型');
+        if(!in_array($type,$this->allow_op_type)) ETHROW('不存在该日志操作类型');
         $this->op_type = $type;
         return $this;
     }
 
     public function data($data=array())
     {
-        if(empty($data)) E('缺少插入数据');
+        if(empty($data)) ETHROW('缺少插入数据');
         $this->checkAction();
         $this->data = array(
             'class' => $this->isValue('class',$data),
@@ -68,12 +69,12 @@ class MpLogs extends OperationlogBase
 
     private function checkData()
     {
-        if(empty($this->data)) E('缺少保存数据');
+        if(empty($this->data)) ETHROW('缺少保存数据');
     }
 
     private function checkAction()
     {
-        if(empty($this->op_type)) E('缺少操作类型');
+        if(empty($this->op_type)) ETHROW('缺少操作类型');
         return true;
     }
 
@@ -98,7 +99,7 @@ class MpLogs extends OperationlogBase
             $userInfo = wp_cache_get($post->post_author,'users');
             $postTitle = $post->post_title;
             $uid = $userInfo->ID;
-            $ip = mpGetUserIp();
+            $ip = mpoplogs_getUserIp();
             $ipObj = new MpIpLogs();
             $ips = $ipObj->checkoutUseIp($uid,$ip);
             $ipId = 0;

@@ -1,10 +1,11 @@
 <?php
-require_once(MRPENG_ROOT.'lib/OperationlogBase.php');
+require_once($mrpengRoot.'lib/OperationlogBase.php');
 class MpIpLogs extends OperationlogBase
 {
 
    public function __construct()
    {
+       parent::__construct();
       if(!$this->wpdb)
       {
          global $wpdb;

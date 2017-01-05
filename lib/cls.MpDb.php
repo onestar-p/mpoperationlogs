@@ -46,7 +46,7 @@ class MpDbOperationlog
 
     public function setTableName($name=array())
     {
-        if(!is_array($name)) E('参数格式错误');
+        if(!is_array($name)) ETHROW('参数格式错误');
         $this->tableName = $name;
         return $this;
     }
@@ -54,7 +54,7 @@ class MpDbOperationlog
     private function checkTableIsSet()
     {
         if(empty($this->tableName) || !is_array($this->tableName))
-            E('未设置需创建的表名');
+            ETHROW('未设置需创建的表名');
         else
             return true;
     }

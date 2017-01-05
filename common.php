@@ -6,16 +6,8 @@
  * Time: 0:33
  */
 
-function mrpeng_get_seo_title()
-{
-    if($title = get_bloginfo('name'))
-        return $title;
-    if($title = wp_title())
-        return $title;
-    return 'TITLE';
-}
 
-function mpGetUserIp()
+function mpoplogs_getUserIp()
 {
     if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown"))
         $ip = getenv("HTTP_CLIENT_IP");
@@ -33,7 +25,7 @@ function mpGetUserIp()
 }
 
 
-function E($msg, $e_code=0) {
+function ETHROW($msg, $e_code=0) {
     /*$debug_backtrace = debug_backtrace();
     $File_Path = $debug_backtrace[0]["file"];
     $file_name = basename($File_Path);
@@ -54,7 +46,7 @@ function E($msg, $e_code=0) {
 
 }
 
-function operationlog_die_err($msg='',$arr=array())
+function mpoplogs_die_err($msg='',$arr=array())
 {
     $arr = array(
         'status' =>0,
@@ -64,7 +56,7 @@ function operationlog_die_err($msg='',$arr=array())
     exit(json_encode($arr));
 }
 
-function operationlog_die_ok($msg='',$arr=array())
+function mpoplogs_die_ok($msg='',$arr=array())
 {
     $arr = array(
         'status' =>1,
@@ -86,7 +78,7 @@ function checkOutputBuffering()
 }
 
 // 分页获取数据
-function pagerQuery($model,$fun,$page=1,$limit=10)
+function mpoplogs_pagerQuery($model,$fun,$page=1,$limit=10)
 {
     $data = array();
 
@@ -104,13 +96,13 @@ function pagerQuery($model,$fun,$page=1,$limit=10)
     $data['total'] = $total;
     $data['pageSum'] = ceil(($total/$limit));
     $data['page'] = $page;
-    $data['pageHtml'] = pageHtml($data);
+    $data['pageHtml'] = mpoplogs_pageHtml($data);
     return $data;
 
 
 }
 
-function pageHtml($data=array())
+function mpoplogs_pageHtml($data=array())
 {
     $html = '';
     $html .= ' <a href="javascript:;" page="1"  class="page">首页</a> ';

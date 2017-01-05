@@ -1,17 +1,17 @@
 <?php
-add_action('publish_post', 'postAddLogs');
-add_action('xmlrpc_public_post', 'postAddLogs');
-add_action('deleted_post','mpDeletePostLogs');
+add_action('publish_post', 'mpoplogs_postAddLogs');
+add_action('xmlrpc_public_post', 'mpoplogs_postAddLogs');
+add_action('deleted_post','mpoplogs_deletePostLogs');
 add_action('wp_login','mpUserLoginWriteIp');
-add_action('admin_menu','mpMenuIndex');
-function mpMenuIndex()
+add_action('admin_menu','mpoplogs_menuIndex');
+function mpoplogs_menuIndex()
 {
-    add_menu_page('管理员操作日志','管理员操作日志','administrator','mpMenuIndex','poperationlogListIndex');
-    add_submenu_page('mpMenuIndex','操作日志列表','日志列表','administrator','operationLog','mpGetLogsListView');
-    add_submenu_page('mpMenuIndex','IP地址列表','IP列表','administrator','iplist','mpGetIpListView');
+    add_menu_page('管理员操作日志','管理员操作日志','administrator','mpoplogs_menuIndex','mpoplogs_logListIndex');
+    add_submenu_page('mpoplogs_menuIndex','操作日志列表','日志列表','administrator','operationLog','mpoplogs_getLogsListView');
+    add_submenu_page('mpoplogs_menuIndex','IP地址列表','IP列表','administrator','iplist','mpoplogs_getIpListView');
 }
 
-function poperationlogListIndex()
+function mpoplogs_logListIndex()
 {
 
     echo '<h1>欢迎使用</h1><hr>';
@@ -24,7 +24,7 @@ function poperationlogListIndex()
 }
 
 // 加载IP列表页面
-function mpGetIpListView()
+function mpoplogs_getIpListView()
 {
     wp_enqueue_script('jquery');
     try
@@ -42,7 +42,7 @@ function mpGetIpListView()
 }
 
 // 加载日志列表页面
-function mpGetLogsListView()
+function mpoplogs_getLogsListView()
 {
     wp_enqueue_script('jquery');
     try
@@ -60,7 +60,7 @@ function mpGetLogsListView()
 }
 
 // 异步获取日志列表
-function mpAjaxGetLogsList()
+function mpoplogs_ajaxGetLogsList()
 {
     try
     {
@@ -69,7 +69,7 @@ function mpAjaxGetLogsList()
         $page = ($page <= 0)?1:$page;
         $log = new MpLogs();
         $log -> order('op_time','desc');
-        $res = pagerQuery($log,function($list){
+        $res = mpoplogs_pagerQuery($log,function($list){
             foreach($list as $k => $v)
             {
                 $mpIp = new MpIpLogs();
@@ -82,16 +82,16 @@ function mpAjaxGetLogsList()
         },$page,$limit);
         $html = $log->fetch('loglist_td',$res['list']);
         $res['list'] = $html;
-        operationlog_die_ok('ok',$res);
+        mpoplogs_die_ok('ok',$res);
     }
     catch(Exception $e)
     {
-        operationlog_die_err($e->getMessage());
+        mpoplogs_die_err($e->getMessage());
     }
 }
 
 // 异步获取IP列表
-function mpAjaxGetIpsList()
+function mpoplogs_ajaxGetIpsList()
 {
     try
     {
@@ -100,7 +100,7 @@ function mpAjaxGetIpsList()
         $page = ($page <= 0)?1:$page;
         $ipObj = new MpIpLogs();
         $ipObj -> order('id','DESC');
-        $res = pagerQuery($ipObj,function($list){
+        $res = mpoplogs_pagerQuery($ipObj,function($list){
             foreach($list as $k => $v)
             {
                 $list[$k]['first_write_time'] = date('Y-m-d H:i:s',$v['first_write_time']);
@@ -111,21 +111,21 @@ function mpAjaxGetIpsList()
         },$page,$limit);
         $html = $ipObj->fetch('ipslist_td',$res['list']);
         $res['list'] = $html;
-        operationlog_die_ok('ok',$res);
+        mpoplogs_die_ok('ok',$res);
     }
     catch (Exception $e)
     {
-        operationlog_die_err($e->getMessage());
+        mpoplogs_die_err($e->getMessage());
     }
 }
 
 
 
-add_action('wp_ajax_mpAjaxGetIpsList','mpAjaxGetIpsList');
-add_action('wp_ajax_mpAjaxGetLogsList','mpAjaxGetLogsList');
+add_action('wp_ajax_mpoplogs_ajaxGetIpsList','mpoplogs_ajaxGetIpsList');
+add_action('wp_ajax_mpoplogs_ajaxGetLogsList','mpoplogs_ajaxGetLogsList');
 
 // 新增、修改文章保存日志
-function postAddLogs($post_id)
+function mpoplogs_postAddLogs($post_id)
 {
 
     try
@@ -139,7 +139,7 @@ function postAddLogs($post_id)
 }
 
 // 文章删除日志操作
-function mpDeletePostLogs($postId)
+function mpoplogs_deletePostLogs($postId)
 {
     try
     {
@@ -156,7 +156,7 @@ function mpUserLoginWriteIp($userName)
 {
     try
     {
-        $ip = mpGetUserIp();
+        $ip = mpoplogs_getUserIp();
         $userId = wp_cache_get($userName,'userlogins');
         $ipObj = new MpIpLogs();
         $res = $ipObj->checkoutUseIp($userId,$ip);
@@ -173,7 +173,8 @@ function mpUserLoginWriteIp($userName)
 
 function operationlog_activation_createtable()
 {
-    require_once(MRPENG_ROOT.'lib/cls.MpDb.php');
+    global $mrpengRoot;
+    require_once($mrpengRoot.'lib/cls.MpDb.php');
     $db = new MpDbOperationlog();
     $db->setTableName(array('mp_ips','mp_logs'));
     $db->checkTables();
@@ -181,7 +182,8 @@ function operationlog_activation_createtable()
 
 function operationlog_activation_deletetable()
 {
-    require_once(MRPENG_ROOT.'lib/cls.MpDb.php');
+    global $mrpengRoot;
+    require_once($mrpengRoot.'lib/cls.MpDb.php');
     $db = new MpDbOperationlog();
     $db->setTableName(array('mp_ips','mp_logs'));
     $db->delete();

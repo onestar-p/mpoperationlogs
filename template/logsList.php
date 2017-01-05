@@ -43,7 +43,7 @@
         $tbodyObj.html('<tr><td><div class="Loading"><stroing>加载中...</stroing></td></tr>');
         jQuery.ajax({
             url:'<?php echo $admin_ajax_url; ?>',
-            data:{action:'mpAjaxGetLogsList',page:page,limit:limit},
+            data:{action:'mpoplogs_ajaxGetLogsList',page:page,limit:limit},
             dataType:'json',
             type:'post',
             success:function(data)
