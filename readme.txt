@@ -2,7 +2,7 @@
 Contributors: Mrpeng
 Donate link: http://www.ipy8.com/
 Tags: operation log, IP record , IP address
-Requires at least: 4.7
+Requires at least: 4.2
 Tested up to: 4.7
 Stable tag: 4.3
 
