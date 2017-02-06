@@ -99,37 +99,41 @@ class MpLogs extends OperationlogBase
             $userInfo = wp_cache_get($post->post_author,'users');
             $postTitle = $post->post_title;
             $uid = $userInfo->ID;
-            $ip = mpoplogs_getUserIp();
-            $ipObj = new MpIpLogs();
-            $ips = $ipObj->checkoutUseIp($uid,$ip);
-            $ipId = 0;
-            if($ips)
-                $ipId = $ips->id;
-            else
-                $ipId = $ipObj ->addUserIp($uid,$ip);
-            $logs = new self();
-            $data = array(
-                'class' => 'post',
-                'op_uid' => $uid,
-                'op_data_id' => (int)$postId,
-                'data_name' => $postTitle,
-                'op_time' => time(),
-                'op_ip_id' => $ipId,
-                'other_info' => '',
-                'op_user_name' => $userInfo->user_login,
-            );
-            if(!$isDelete)
+            if($uid)
             {
-                if($post->post_date == $post->post_modified)
-                    $logs->action('create');
+                $ip = mpoplogs_getUserIp();
+                $ipObj = new MpIpLogs();
+                $ips = $ipObj->checkoutUseIp($uid,$ip);
+                $ipId = 0;
+                if($ips)
+                    $ipId = $ips->id;
                 else
-                    $logs->action('update');
+                    $ipId = $ipObj ->addUserIp($uid,$ip);
+                $logs = new self();
+                $data = array(
+                    'class' => 'post',
+                    'op_uid' => $uid,
+                    'op_data_id' => (int)$postId,
+                    'data_name' => $postTitle,
+                    'op_time' => time(),
+                    'op_ip_id' => $ipId,
+                    'other_info' => '',
+                    'op_user_name' => $userInfo->user_login,
+                );
+                if(!$isDelete)
+                {
+                    if($post->post_date == $post->post_modified)
+                        $logs->action('create');
+                    else
+                        $logs->action('update');
+                }
+                else
+                {
+                    $logs->action('delete');
+                }
+                $logs->data($data)->insert();
             }
-            else
-            {
-                $logs->action('delete');
-            }
-            $logs->data($data)->insert();
+
         }
     }
 

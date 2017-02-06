@@ -3,7 +3,7 @@
 Plugin Name: MpOperationLogs
 Plugin URI: https://wordpress.org/plugins/mpoperationlogs/
 Description: 后台管理员操作日志、后台登陆IP记录插件(administrator operation logs and IP record Plugin).
-Version: 1.0.0
+Version: 1.0.1
 Author: Mrpeng
 Author URI: http://www.ipy8.com/
 */

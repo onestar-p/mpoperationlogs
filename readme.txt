@@ -33,3 +33,6 @@ Stable tag: 4.3
 
 = 1.0.0 =
 * just getting started
+
+= 1.0.1 =
+* 取消记录自动删除‘自动草稿’日志记录
