@@ -94,7 +94,7 @@ class MpLogs extends OperationlogBase
         $post = wp_cache_get($postId,'posts');
 
 
-        if(($post && $post->post_type == 'post'))
+        if(($post && $post->post_type == 'post') && $post->post_status != 'auto-draft')
         {
             $userInfo = wp_cache_get($post->post_author,'users');
             $postTitle = $post->post_title;
