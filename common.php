@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: root
- * Date: 2016/12/16
- * Time: 0:33
- */
-
 
 function mpoplogs_getUserIp()
 {
